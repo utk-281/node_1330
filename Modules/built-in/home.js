@@ -1,6 +1,6 @@
 // ! fs ==> it stands for file system
 
-//to interact with os and perform CRUD on files and folders/directory
+//to interact with os and perform CRUD on files
 
 //! import fs module first
 // syntax : let/const variableName = require("node:module-name");
@@ -66,61 +66,11 @@ console.log("end");
 // console.log("end");
 
 // copy the contents of "fs.js" to a new file "home.js"
-/*
+
 console.log("start");
 let readFile = fs.readFileSync("./fs.js", "utf-8");
+console.log(readFile);
 console.log("middle");
 fs.writeFileSync("./home.js", readFile);
 console.log("file created");
 console.log("end");
-*/
-
-//! CRUD of folders ==========================
-
-//! 1) creating a folder
-// method name ==> mkdirSync()
-// syntax ==> fs.mkdirSync("folder-name")
-
-// fs.mkdirSync("express");
-// console.log("folder created");
-
-// create a folder inside local folder
-// fs.mkdirSync("../local/users");
-// console.log("folder created");
-
-//! 2) =================delete a folder===================
-// method name ==> rmdirSync()
-// syntax ==> fs.rmdirSync("path")
-
-// fs.rmdirSync("./express");
-// console.log("folder deleted");
-
-//! 3) =================renaming a folder/file=================
-// method name ==> renameSync()
-// syntax ==> fs.renameSync("old filename/ foldername", "new name")
-
-// fs.renameSync("data.txt", "data1.txt");
-// fs.renameSync("demo", "test");
-
-//? "backend/src/controllers/user.js" ==> nested operation (creation)
-// root folder ==> backend
-
-// fs.mkdirSync("../../backend");
-// console.log("backend folder created");
-// fs.mkdirSync("../../backend/src");
-// console.log("src created");
-// fs.mkdirSync("../../backend/src/controllers");
-// console.log("controller created");
-// fs.writeFileSync("../../backend/src/controllers/user.js", "let user = false");
-// console.log("file created");
-
-// fs.mkdirSync("../../backend/src/controllers"); this will not work
-// fs.rmdirSync("../../backend"); this will also not work as folder must be empty
-
-//? "backend/src/controllers/user.js" ==> nested operation (deletion)
-fs.unlinkSync("../../backend/src/controllers/user.js");
-console.log("file deleted");
-fs.rmdirSync("../../backend/src/controllers");
-fs.rmdirSync("../../backend/src");
-fs.rmdirSync("../../backend");
-console.log("folder deleted");
