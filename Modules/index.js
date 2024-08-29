@@ -11,4 +11,4 @@
 
 //? third-party modules ==> modules which are installed from a different source(npm). for example ==> express, mongodb, dotenv, etc..
 
-//? built-in modules ==> modules which are available in the nodejs environment or pre-installed modules. for examples ==> fs, http, crypto, path, os, etc..
+//? built-in modules ==> modules which are available in the nodejs environment or pre-installed modules. for example ==> fs, http, crypto, path, os, etc..
