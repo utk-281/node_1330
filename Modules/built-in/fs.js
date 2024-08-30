@@ -4,7 +4,7 @@
 
 //! import fs module first
 // syntax : let/const variableName = require("node:module-name");
-let fs = require("fs");
+// let fs = require("fs");
 // console.log(fs);
 
 //! synchronous way or blocking way
@@ -118,9 +118,166 @@ console.log("end");
 // fs.rmdirSync("../../backend"); this will also not work as folder must be empty
 
 //? "backend/src/controllers/user.js" ==> nested operation (deletion)
-fs.unlinkSync("../../backend/src/controllers/user.js");
-console.log("file deleted");
-fs.rmdirSync("../../backend/src/controllers");
-fs.rmdirSync("../../backend/src");
-fs.rmdirSync("../../backend");
-console.log("folder deleted");
+// fs.unlinkSync("../../backend/src/controllers/user.js");
+// console.log("file deleted");
+// fs.rmdirSync("../../backend/src/controllers");
+// fs.rmdirSync("../../backend/src");
+// fs.rmdirSync("../../backend");
+// console.log("folder deleted");
+
+//! =============================== async execution =====================================
+// ==> using callbacks ==> using then, catch ==> using async await
+
+//! ============async using callbacks=======================
+
+//! 1) create a file
+// method name ==> writeFile()
+// syntax ==> fs.writeFile("path", "data", cb)
+
+// console.log("start");
+// console.log("middle");
+// fs.writeFile("../index.txt", "this is some data", (err) => {
+//   if (err) console.log(err);
+//   console.log("file created");
+// });
+// console.log("end");
+
+//! 2) reading a file
+// method name ==> readFile()
+// syntax ==> fs.readFile("path", "encoding", cb)
+
+// console.log("start");
+// console.log("middle");
+// fs.readFile("./fs.js", "utf-8", (err, param2) => {
+//   if (err) console.log(err);
+//   console.log("file read");
+//   console.log(param2);
+// });
+// console.log("end");
+
+//! 3) update or append file
+// method name ==> appendFile
+// syntax ==> fs.appendFile("path", "data", cb)
+
+// console.log("start");
+// console.log("middle");
+// fs.appendFile("./index.txt", " this is second statement", (err) => {
+//   if (err) throw err;
+//   console.log("file updated");
+// });
+// console.log("end");
+
+//! 4) deleting a file
+// method name => unlink()
+// syntax ==> fs.unlink("path", cb)
+
+// console.log("start");
+// fs.unlink("./index.txt", (err) => {
+//   if (err) throw err;
+//   console.log("file deleted");
+// });
+// console.log("end");
+
+//! 5) CREATING A FOLDER
+// method name ==> mkdir()
+// syntax ==> fs.mkdir("path", cb)
+
+// fs.mkdir("../built-in1", (err) => {
+//   if (err) throw err;
+//   console.log("folder created");
+// });
+// console.log("end");
+
+//! 6) deleting a folder
+
+//! 7) renaming folder/file
+
+//! =================using then/catch======================
+
+let fs = require("fs").promises;
+// let fs = require("fs/promises");
+
+//! 1) creating a file
+// method name ==> writeFile()
+// syntax ==> fs.writeFile("path", "data")
+// console.log("start");
+// let data = fs.writeFile("./index.js", "data to be added");
+// data
+//   .then(() => {
+//     console.log("file created");
+//   })
+//   .catch((err) => {
+//     console.log("err", err);
+//   });
+
+// console.log("end");
+
+//! 2) reading a file
+//method name ==> readFile()
+// syntax ==> fs.readFile("path", "encoding").then().catch()
+
+// console.log("start");
+// fs.readFile("./index.js", "utf-8")
+//   .then((result) => {
+//     console.log(result);
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+// console.log("end");
+
+//! copy the contents of "fs.js" to new file "index.txt" using then/catch
+
+// fs.readFile("./fs.js", "utf-8")
+//   .then((result) => {
+//     fs.writeFile("./index.txt", result)
+//       .then(() => {
+//         console.log("file copy pasted");
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+//! 3) updating a file
+// method name ==> appendFile()
+// syntax ==> fs.appendFile().then().catch()
+
+// fs.appendFile("./index.txt", "data to be added")
+//   .then(() => {
+//     console.log("file appended");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+//! 4) DELETING A file
+// method name ==> unlink()
+// syntax ==> fs.unlink().then().catch()
+
+// fs.unlink("./index.txt")
+//   .then(() => {
+//     console.log("file deleted");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+//! creating a folder
+// method name ==> mkdir()
+// syntax ==> fs.mkdir().then().catch()
+
+// fs.mkdir("./node_modules")
+//   .then(() => {
+//     console.log("folder created");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+//! deleting a folder, rename file/ folder
+
+//"backend/src/controller/user.js" using then/catch and cb
