@@ -194,7 +194,7 @@ console.log("end");
 
 //! =================using then/catch======================
 
-let fs = require("fs").promises;
+// let fs = require("fs").promises;
 // let fs = require("fs/promises");
 
 //! 1) creating a file
@@ -281,3 +281,122 @@ let fs = require("fs").promises;
 //! deleting a folder, rename file/ folder
 
 //"backend/src/controller/user.js" using then/catch and cb
+
+//!=================using async await======================
+//! 1)  creating a file
+
+// console.log("start");
+async function write() {
+  console.log("inside async/await");
+  await fs.writeFile("./index.html", "data");
+  console.log("bye");
+}
+// console.log("end");
+
+function hello() {
+  console.log("hello");
+}
+
+// write();
+// hello();
+
+// ! 2)=================== updating a file =====================
+let updateFile = async () => {
+  await fs.appendFile("./index.html", "new statement");
+  console.log("file updated");
+};
+
+// updateFile();
+
+//? let fs = require("fs") ==> this will give direct output based on the operation.
+
+//? let fs = require("fs/promises") or require("fs").promises ==> this will return a promise based on the operation.
+
+//!======================= 3) reading a file========================
+let readFile = async () => {
+  let data = await fs.readFile("./index.html", "utf-8");
+  console.log(data);
+};
+// readFile();
+// fileRead();
+
+// "backend/src/controller/userController.js" using async await
+
+let fun = async () => {
+  await fs.mkdir("./backend");
+  console.log("backend created");
+  await fs.mkdir("./backend/src");
+  console.log("src created");
+  await fs.mkdir("./backend/src/controller");
+  console.log("controller created");
+  await fs.writeFile("./backend/src/controller/userController.js", "data");
+  console.log("file created");
+};
+
+// fun();
+
+let deleteFile = async () => {
+  await fs.rmdir("./backend", { recursive: true });
+};
+
+// deleteFile();
+
+//! =================== buffer and streams ====================
+
+let fs = require("fs");
+// console.log(fs);
+
+//? buffer ==>
+// buffer is a fixed size array allocated outside the V8 engine
+// once buffer is created it cannot be changed i.e, it is fixed in size
+// it is used to store binary data
+// it is used for streaming purposes.
+
+// let read = fs.readFileSync("./index.html");
+// console.log(read);
+
+//TODO
+// Buffer is a class in NodeJS.
+
+//? streaming ==> streaming is used for transferring data from source to destination in chunks or pieces.
+//? it is of 4 types ==>
+
+//a) readableStream ==> it is used to read data from source.
+//b) writeableStream ==> it is used to write the data to destination.
+//c) duplexStream ==> it is used to read and write data simultaneously.
+//d) transformStream ==> it is similar to duplex streams but we can modify the data.
+
+//! readableStream
+// method name ==> createReadStream()
+// syntax ==> fs.createReadStream("path", "encoding")
+
+// let payload = fs.createReadStream("./index.html", "utf-8");
+// payload.on("data", (myVar) => {
+//   console.log(myVar);
+// });
+
+//! writeableStream
+// method name ==> createWriteStream()
+// syntax ==> fs.createWriteStream("path/filename")
+
+// let payload = fs.createWriteStream("./data.txt");
+
+// payload.write("data to be written", () => {
+//   console.log("file created");
+// });
+
+//! duplexStream
+// method name ==> pipe()
+// pipe() ==> pipe() is used to connect the source to destination and this method allows us to perform both read and write operations simultaneously.
+// read fs.js using streams
+// let readData = fs.createReadStream("./fs.js");
+// let writeData = fs.createWriteStream("./app.js");
+// readData.pipe(writeData);
+// console.log("file created");
+
+// how data is transferred in chunks
+// TODO
+let data = fs.createReadStream("./index.html", { higherWaterMark: 100 });
+data.on("data", (chunk) => {
+  console.log(`${chunk.toString()} data read -------- ${chunk.length} size`);
+});
