@@ -31,7 +31,7 @@
 /* structure of document
 
   {     
-    key1: value1, ==> on field
+    key1: value1, ==> one field
     key2: value2,
     .
     .
@@ -46,5 +46,22 @@
 //? mongoDB ==> it is open source, cross-platform, document oriented database which stores data in JSON/BSON format and has dynamic schema.
 
 //! download mongoDB compass ==> https://www.mongodb.com/try/download/community
+// mongoDB compass is a Graphical User Interface which provides a interactive interface to perform operations on databases (CRUD ==> create, read, update, delete)
 
-//! download mongoDB shell ==> https://www.mongodb.com/try/download/shell
+//! download mongoDB shell ==> https://www.mongodb.com/try/download/shell (CLI ==> Command Line Interface)
+// copy the location while installing shell,
+
+// ==> search env in home ==> click on environment variables ==> double click on system path ==> then add the copied path and press ok.
+
+// shell provides an interface through which a user can perform CRUD with the help of mongoDB commands. it is build on javascript language.
+
+//! ==> to enter the mongoDB shell use command "mongosh" on terminal
+
+//! FEATURES OF MONGODB==>
+// by default, it is dynamic.
+// it has distributed network
+// it supports horizontal scaling
+// TODO (how data is stored inside mongodb)
+// it can support large amount of data.(humongous)
+
+//! when to use mongoDb ==> when data to be stored is very large and relation between data is not mandatory then we go for noSQL databases.
