@@ -395,7 +395,8 @@ let fs = require("fs");
 // console.log("file created");
 
 // how data is transferred in chunks
-// TODO
+
+// ========================================== TODO
 let data = fs.createReadStream("./index.html", { higherWaterMark: 100 });
 data.on("data", (chunk) => {
   console.log(`${chunk.toString()} data read -------- ${chunk.length} size`);
