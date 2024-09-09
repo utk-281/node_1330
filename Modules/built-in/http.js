@@ -75,12 +75,67 @@ server.listen(9000, (err) => {
 
 //! routing ==> to handle multiple routes requested by user based on the endpoints
 
-let server = http.createServer((req, res) => {
+/* let server = http.createServer((req, res) => {
   console.log(req.url);
-  console.log("hello");
-
-  console.log();
-  res.end();
+  // console.log(req);
+  // //? by default landing page url === /
+  //! routing
+  //? home page
+  if (req.url === "/") {
+    res.writeHead(200, "ok", { "content-type": "text/plain" });
+    res.end("home page");
+  }
+  //? about page
+  else if (req.url === "/about") {
+    res.writeHead(200, "ok", { "content-type": "text/plain" });
+    // "/about" this is called an endpoint
+    res.end("this is about page");
+  }
+  //? download page
+  else if (req.url === "/download") {
+    res.writeHead(200, "ok", { "content-type": "text/plain" });
+    res.end("this is download page");
+  }
+  //? else block
+  else {
+    res.end("page not found");
+  }
 });
 
-server.listen(9000);
+server.listen(9000, (err) => {
+  if (err) throw err;
+  console.log("server running....");
+});
+ */
+
+// ! routing with sending html pages =================
+
+// let http = require("http");
+// let fs = require("fs");
+
+let server = http.createServer((req, res) => {
+  if (req.url === "/") {
+    res.writeHead(200, "ok", { "content-type": "text/html" });
+    fs.createReadStream("./public/home.html").pipe(res);
+  } else if (req.url === "/about") {
+    res.writeHead(200, "ok", { "content-type": "text/html" });
+    let data = fs.createReadStream("./public/about.html");
+    data.pipe(res);
+  } else if (req.url === "/download") {
+    res.writeHead(200, "ok", { "content-type": "text/html" });
+    fs.createReadStream("./public/download.html").pipe(res);
+  } else if (req.url === "/styles") {
+    res.writeHead(200, "ok", { "content-type": "text/css" });
+    fs.createReadStream("./public/styles.css").pipe(res);
+  } else if (req.url === "/data") {
+    res.writeHead(200, "ok", { "content-type": "application/json" });
+    fs.createReadStream("./public/data.json").pipe(res);
+  } else {
+    res.writeHead(200, "ok", { "content-type": "text/html" });
+    fs.createReadStream("./public/404.html").pipe(res);
+  }
+});
+server.listen(9000, (err) => {
+  if (err) throw err;
+  console.log("server running...........");
+});
