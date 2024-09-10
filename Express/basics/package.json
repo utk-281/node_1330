@@ -1,0 +1,20 @@
+{
+  "name": "into-to-express",
+  "version": "1.0.0",
+  "description": "this is an introduction",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "middleware",
+    "routing"
+  ],
+  "author": "utk",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.20.0",
+    "mongodb": "^6.8.1"
+  }
+}

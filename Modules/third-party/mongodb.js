@@ -16,7 +16,6 @@
 let mongodb = require("mongodb").MongoClient; // this will act as an interface between node and mongoDB
 
 // console.log(mongodb);
-
 // let url = "mongodb://localhost:27017";
 
 let connectDB = async () => {
@@ -24,12 +23,50 @@ let connectDB = async () => {
   let client = await mongodb.connect("mongodb://localhost:27017");
 
   // now create a database using db()
-  let database = client.db("myDB");
+  let database = client.db("emp");
 
   // now create collection using createCollection()
-  let collection = await database.createCollection("myCollection");
+  let collection = await database.createCollection("emp");
 
   console.log("collection created");
+
+  //! CRUD operations==============
+
+  //? 1 ) create/insert ==> insertOne() / insertMany()
+  // collection.insertOne({ name: "abc" });
+  // collection.insertMany([{ name: "xyz" }, { name: "pqr" }]);
+  // console.log("data added");
+
+  //? 2) read/fetch ==> findOne({filter}) / find({filter})
+  // let data = await collection.findOne(); // it will fetch the first document present in the collection
+  // let data = await collection.findOne({ salary: 1100 });
+  // console.log(data);
+
+  // let data = await collection.find().toArray(); // whenever using find() display the data in array format.
+  // let data = await collection.findOne({ sal: 2500 });
+  // console.log(data);
+
+  //? 3) update data ==> updateOne({filter}, {updated value}) / updateMany({filter}, {updated value})
+  // let updatedData = await collection.updateOne(
+  //   { name: "xyz" },
+  //   { $set: { name: "new name", age: 23, city: "mumbai" } }
+  // );
+
+  // let data = await collection.updateMany({ sal: 2500 }, { $set: { havingInsurance: false } });
+
+  // updating all documents present in the collection
+  // let data = await collection.updateMany({}, { $set: { comm: 1200 } });
+
+  // console.log("data updated" + data);
+
+  //? 4) delete data ==> deleteOne({filter}) / deleteMany({filter})
+  // let deletedData = await collection.deleteOne({}); // this will delete the first document present in the collection
+
+  // let deletedData1 = await collection.deleteOne({ field: "value" }); // this will delete the first document present in the collection
+
+  // let deleteMany = await collection.deleteMany({}); // it will delete all the documents
+
+  // let deleteMany1 = await collection.deleteMany({ field: value }); // it will delete all the documents present in the collection
 };
 
 connectDB();
