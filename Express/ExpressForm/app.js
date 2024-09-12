@@ -1,31 +1,21 @@
 let express = require("express");
-let mongodb = require("mongodb").MongoClient;
 let fs = require("fs");
 
-//! defining mongoDB connection
-let connectDB = async () => {
-  let client = await mongodb.connect("mongodb://127.0.0.1:27017");
-  let database = client.db("usersDB");
-  let collection = await database.createCollection("usersInfo");
-  return collection;
-};
+//? importing router.js file
+let usersRoute = require("./router");
+// let connectDB = async () => {
+//   let client = await mongodb.connect("mongodb://127.0.0.1:27017");
+//   let database = client.db("usersDB");
+//   let collection = await database.createCollection("usersInfo");
+//   return collection;
+// };
 
 let app = express();
 
 //!======== middlewares ===========
 app.use(express.urlencoded({ extended: true })); // html forms
-
-//? home page
-app.get("/", (req, res) => {
-  //   res.send("home page");
-  fs.createReadStream("./public/home.html").pipe(res);
-});
-
-//? form page
-app.get("/login", (req, res) => {
-  //   res.send("form page");
-  fs.createReadStream("./public/form.html").pipe(res);
-});
+// use the variable in the middleware
+app.use("/api", usersRoute);
 
 //? handling post method
 app.post("/user", async (req, res) => {
