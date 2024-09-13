@@ -1,17 +1,19 @@
-const express = require("express");
-
+let express = require("express");
 const { connectDB } = require("./config/database");
+const { PORT } = require("./config");
 
-//! this step wil import dotenv module which helps in reading the contents of .env file and config() is used to parse the contents of .env file
-require("dotenv").config();
+const userRoute = require("./routers/user.router");
 
-//! connectDB
+let app = express();
+
+app.use(express.json());
+app.use("/api", userRoute);
+
 connectDB();
 
-const app = express();
-
-app.listen(process.env.PORT, (err) => {
-  // process.env.PORT is reading the PORT variable from system environment variable
-  if (err) throw err;
-  console.log(`server is running at http://localhost:${process.env.PORT}`);
+app.listen(PORT, (err) => {
+  if (err) console.log("error while connecting to the server", er);
+  console.log("server running...");
 });
+
+// http://localhost:9000/login/  ==> api
