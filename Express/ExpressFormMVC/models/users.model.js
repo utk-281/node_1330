@@ -7,13 +7,12 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
   },
-  password: {
-    type: String,
-  },
   phoneNo: {
     type: Number,
+  },
+  password: {
+    type: String,
   },
 });
 
 module.exports = mongoose.model("User", userSchema);
-//! users collection will be created in the database  ==> this conversion will be done by mongoose (lowercase + plural)

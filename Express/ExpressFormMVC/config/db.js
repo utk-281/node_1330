@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
 const { MONGODB_URL } = require(".");
 
-let connectDB = async () => {
+const connectDB = async () => {
   await mongoose.connect(MONGODB_URL);
-  console.log("database connected");
+  console.log("database connected.....");
 };
 
 module.exports = {
   connectDB,
 };
+
+// use only function name

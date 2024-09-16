@@ -4,7 +4,7 @@ step 2) create a .json file in the project folder
 
 step 3) install the required modules
 
-step 4) create a .env file, inside this file define all the sensitive information   which you don't want to be display
+step 4) create a .env file, inside this file define all the sensitive information, which you don't want to be display
 
 step 5) create a config folder
      ==> create a index.js file : use dotenv module
