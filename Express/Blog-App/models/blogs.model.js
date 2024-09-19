@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const blogSchema = new mongoose.Schema(
   {
+    _id: { type: Number, required: true },
     title: {
       type: String,
       required: true,

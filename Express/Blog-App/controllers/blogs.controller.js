@@ -3,7 +3,6 @@ const BLOG_SCHEMA = require("../models/blogs.model");
 exports.addBlog = async (req, res) => {
   try {
     let payload = req.body;
-    console.log(payload);
 
     /* alternate way to store data 
     let newBlog = new BLOG_SCHEMA(payload)
