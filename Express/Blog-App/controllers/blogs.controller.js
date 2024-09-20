@@ -51,7 +51,7 @@ exports.fetchOneBlog = async (req, res) => {
     // let exampleURL==http........UNIQUE_ID........
     let { id } = req.params;
     console.log(id);
-    let findBlog = await BLOG_SCHEMA.findOne({ _id: id });
+    let findBlog = await BLOG_SCHEMA.findOne({ _id: id }).populate("user");
     if (!findBlog) {
       return res.status(200).json({
         success: true,

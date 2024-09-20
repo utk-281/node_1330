@@ -1,4 +1,5 @@
 const USER_SCHEMA = require("../models/users.model");
+const { generateToken } = require("../utils/generateJwt");
 
 exports.addUser = async (req, res) => {
   try {
@@ -39,9 +40,13 @@ exports.loginUser = async (req, res) => {
 
     if (!isMatched) return res.status(401).json({ success: false, message: "wrong password" });
 
+    let token = generateToken(findUser._id);
+    console.log(token);
+
     res.status(200).json({
       success: true,
       message: "user logged in",
+      tokenGenerated: token,
     });
   } catch (error) {
     res.status(500).json({

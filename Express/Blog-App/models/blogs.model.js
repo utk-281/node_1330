@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const blogSchema = new mongoose.Schema(
   {
-    _id: { type: Number, required: true },
     title: {
       type: String,
       required: true,
@@ -13,7 +12,10 @@ const blogSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    //TODO: add user
+    user: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true } // createdAt and updatedAt
 );
