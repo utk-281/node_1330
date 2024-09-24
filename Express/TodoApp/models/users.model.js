@@ -3,44 +3,45 @@ const bcrypt = require("bcrypt");
 
 const userSchema = new Schema(
   {
-    avatar: {
+    profilePicture: {
       type: String,
+      default: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
     },
     name: {
       type: String,
-      required: [true, "name is required"],
+      required: true,
       trim: true,
     },
     email: {
       type: String,
-      required: [true, "name is required"],
+      required: true,
       trim: true,
       unique: true,
       lowercase: true,
     },
     password: {
       type: String,
-      required: [true, "password is required"],
+      required: true,
       trim: true,
     },
     role: {
       type: String,
-      lowercase: true,
-      enum: ["admin", "user"],
+      enum: ["user", "admin"],
       default: "user",
     },
   },
   { timestamps: true }
 );
 
-// password hashing
+//! password hashing
 userSchema.pre("save", async function () {
-  const salt = await bcrypt.genSalt(10); // salt ==> random string  (2^10 iterations)
-  this.password = await bcrypt.hash(this.password, salt);
+  let salt = await bcrypt.genSalt(10);
+  let hashedPassword = await bcrypt.hash(this.password, salt);
+  this.password = hashedPassword;
 });
 
-// password comparing
-userSchema.methods.comparePassword = async function (enteredPassword) {
+//! password verification
+userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
