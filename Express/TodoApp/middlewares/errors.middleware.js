@@ -1,5 +1,3 @@
-const { ErrorHandler } = require("../utils/ErrorHandler");
-
 exports.error = (err, req, res, next) => {
   //! global error handler
   err.statusCode = err.statusCode || 500;

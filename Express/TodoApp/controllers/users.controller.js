@@ -1,7 +1,7 @@
 const USER_SCHEMA = require("../models/users.model");
 const asyncHandler = require("express-async-handler");
-const { ErrorHandler } = require("../utils/ErrorHandler");
 const { generateToken } = require("../utils/jwt");
+const { ErrorHandler } = require("../utils/ErrorHandler");
 
 //! user functionality
 //! ================================ register user =======================================
@@ -10,7 +10,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 
   let existingUser = await USER_SCHEMA.findOne({ email });
   if (existingUser) {
-    return next(new ErrorHandler("User already exists", 409));
+    return next(new ErrorHandler("user already exists, please use another email", 409));
   }
 
   let newUser = await USER_SCHEMA.create({
@@ -34,21 +34,21 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 
   let existingUser = await USER_SCHEMA.findOne({ email });
   if (!existingUser) {
-    return next(new ErrorHandler("User not found", 404));
+    return next(new ErrorHandler("invalid credentials", 401));
   }
 
   let isPasswordMatched = await existingUser.matchPassword(password);
 
   if (!isPasswordMatched) {
-    return next(new ErrorHandler("Incorrect password", 401));
+    return res.json({ message: "invalid credentials" });
   }
 
   let token = generateToken(existingUser._id);
   console.log(token);
 
-  res.cookie("token", token, {
+  res.cookie("cookie", token, {
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000,
+    maxAge: 1 * 60 * 60 * 1000,
   });
 
   res.status(200).json({
@@ -61,7 +61,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 //! ================================ logout user =======================================
 
 exports.logoutUser = async (req, res) => {
-  res.clearCookie("token", "", {
+  res.clearCookie("cookie", "", {
     maxAge: Date.now(),
   });
 

@@ -4,6 +4,7 @@ const { connectDB } = require("./config/database");
 const cookieParser = require("cookie-parser");
 
 const userRoutes = require("./routers/users.router");
+const todoRoutes = require("./routers/todos.router");
 const { error } = require("./middlewares/errors.middleware");
 
 connectDB();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/users", userRoutes);
+app.use("/todos", todoRoutes);
 
 app.use(error);
 
