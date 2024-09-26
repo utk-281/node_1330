@@ -2,6 +2,7 @@ const express = require("express");
 const { PORT } = require("./config");
 const { connectDB } = require("./config/database");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const userRoutes = require("./routers/users.router");
 const todoRoutes = require("./routers/todos.router");
@@ -12,6 +13,12 @@ connectDB();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use("/users", userRoutes);
 app.use("/todos", todoRoutes);
