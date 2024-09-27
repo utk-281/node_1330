@@ -34,13 +34,13 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 
   let existingUser = await USER_SCHEMA.findOne({ email });
   if (!existingUser) {
-    return next(new ErrorHandler("invalid credentials", 401));
+    return next(new ErrorHandler("Email not found", 401));
   }
 
   let isPasswordMatched = await existingUser.matchPassword(password);
 
   if (!isPasswordMatched) {
-    return res.json({ message: "invalid credentials" });
+    return res.json({ message: "invalid password" });
   }
 
   let token = generateToken(existingUser._id);
@@ -71,12 +71,57 @@ exports.logoutUser = async (req, res) => {
   });
 };
 
-exports.updateUserProfile = async (req, res) => {};
-exports.updateUserPassword = async (req, res) => {};
+//! ================================ update user profile=======================================
+
+exports.updateUserProfile = async (req, res) => {
+  let id = req.foundUser._id; //66f51ee920886964482d77c1
+
+  let { name, email } = req.body;
+
+  let updateUser = await USER_SCHEMA.updateOne({ _id: id }, { $set: { name, email } });
+
+  res.status(200).json({
+    success: true,
+    message: "user updated successfully",
+  });
+};
+
+//! ================================ update user password=======================================
+
+exports.updateUserPassword = async (req, res) => {
+  let id = req.foundUser._id;
+  let findUser = await USER_SCHEMA.findOne({ _id: id });
+  let { newPassword, oldPassword } = req.body;
+
+  if (!newPassword || !oldPassword) {
+    return next(new ErrorHandler("please enter new password and old password", 401));
+  }
+
+  let isPasswordMatched = await findUser.matchPassword(oldPassword);
+  if (!isPasswordMatched) {
+    return next(new ErrorHandler("old password is incorrect", 401));
+  }
+
+  findUser.password = newPassword;
+  await findUser.save();
+
+  res.status(200).json({
+    success: true,
+    message: "user password updated successfully",
+  });
+};
 exports.deleteUserProfile = async (req, res) => {};
 
 //! admin functionality
-exports.fetchAllUsers = async (req, res) => {};
+exports.fetchAllUsers = async (req, res, next) => {
+  let users = await USER_SCHEMA.find();
+
+  if (users.length === 0) {
+    return next(new ErrorHandler("no user found", 404));
+  }
+
+  res.status(200).json({ success: true, message: "all users fetched", users: users });
+};
 exports.fetchSingleUser = async (req, res) => {};
 exports.deleteUser = async (req, res) => {};
-exports.updateUser = async (req, res) => {};
+exports.updateUserRole = async (req, res) => {};

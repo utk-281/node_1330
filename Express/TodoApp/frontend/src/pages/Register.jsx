@@ -5,14 +5,14 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user");
+  // const [role, setRole] = useState("user");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(name, email, password, role);
+    console.log(name, email, password);
 
     axios
-      .post("http://localhost:9000/users/register", { name, email, password, role })
+      .post("http://localhost:9000/users/register", { name, email, password })
       .then(() => {
         alert("Registered Successfully");
       })
@@ -24,8 +24,8 @@ const Register = () => {
   return (
     <div>
       Sign UP
-      <form onSubmit={handleSubmit}>
-        <label> Name</label>
+      <form>
+        <label htmlFor="name"> Name</label>
         <input
           type="text"
           name="name"
@@ -33,7 +33,7 @@ const Register = () => {
           onChange={(e) => setName(e.target.value)}
         ></input>
         <br></br>
-        <label> Email</label>
+        <label htmlFor="email"> Email</label>
         <input
           type="email"
           name="email"
@@ -42,7 +42,7 @@ const Register = () => {
         ></input>
         <br></br>
 
-        <label> Password</label>
+        <label htmlFor="password"> Password</label>
         <input
           type="password"
           name="password"
@@ -51,13 +51,13 @@ const Register = () => {
         ></input>
         <br></br>
 
-        <select name="role" value={role} onChange={(e) => setRole(e.target.value)}>
+        {/* <select name="role" htmlFor="role" value={role} onChange={(e) => setRole(e.target.value)}>
           <option>User</option>
           <option>Admin</option>
-        </select>
+        </select> */}
         <br></br>
 
-        <input type="submit"></input>
+        <input type="submit" onClick={handleSubmit}></input>
       </form>
     </div>
   );
