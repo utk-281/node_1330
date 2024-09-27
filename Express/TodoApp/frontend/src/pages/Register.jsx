@@ -1,20 +1,24 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [role, setRole] = useState("user");
+  const [role, setRole] = useState("user"); // Default role is "user"
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(name, email, password);
+    console.log(name, email, password, role);
 
     axios
-      .post("http://localhost:9000/users/register", { name, email, password })
+      .post("http://localhost:9000/users/register", { name, email, password, role })
       .then(() => {
         alert("Registered Successfully");
+        navigate("/login");
       })
       .catch((err) => {
         console.log(err);
@@ -51,10 +55,11 @@ const Register = () => {
         ></input>
         <br></br>
 
-        {/* <select name="role" htmlFor="role" value={role} onChange={(e) => setRole(e.target.value)}>
-          <option>User</option>
-          <option>Admin</option>
-        </select> */}
+        <label htmlFor="role">Role</label>
+        <select name="role" value={role} onChange={(e) => setRole(e.target.value)}>
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
         <br></br>
 
         <input type="submit" onClick={handleSubmit}></input>
