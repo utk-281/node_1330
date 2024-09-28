@@ -47,7 +47,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   console.log(token);
 
   res.cookie("cookie", token, {
-    httpOnly: true,
+    // httpOnly: true,
     maxAge: 1 * 60 * 60 * 1000,
   });
 
@@ -63,6 +63,9 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 exports.logoutUser = async (req, res) => {
   res.clearCookie("cookie", "", {
     maxAge: Date.now(),
+    sameSite: "lax", // Add sameSite if used while setting the cookie
+    secure: false, // Use true if you're using HTTPS, otherwise false
+    path: "/", // Ensure this matches the path where the cookie was set
   });
 
   res.status(200).json({
