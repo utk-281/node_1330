@@ -6,6 +6,8 @@ const { ErrorHandler } = require("../utils/ErrorHandler");
 //! user functionality
 //! ================================ register user =======================================
 exports.registerUser = asyncHandler(async (req, res, next) => {
+  console.log(req.file);
+  console.log(req.file.path);
   let { name, email, password, role } = req.body;
 
   let existingUser = await USER_SCHEMA.findOne({ email });
@@ -76,7 +78,7 @@ exports.logoutUser = async (req, res) => {
 
 //! ================================ update user profile=======================================
 
-exports.updateUserProfile = async (req, res) => {
+exports.updateUserProfile = asyncHandler(async (req, res) => {
   let id = req.foundUser._id; //66f51ee920886964482d77c1
 
   let { name, email } = req.body;
@@ -87,11 +89,11 @@ exports.updateUserProfile = async (req, res) => {
     success: true,
     message: "user updated successfully",
   });
-};
+});
 
 //! ================================ update user password=======================================
 
-exports.updateUserPassword = async (req, res) => {
+exports.updateUserPassword = asyncHandler(async (req, res) => {
   let id = req.foundUser._id;
   let findUser = await USER_SCHEMA.findOne({ _id: id });
   let { newPassword, oldPassword } = req.body;
@@ -112,11 +114,19 @@ exports.updateUserPassword = async (req, res) => {
     success: true,
     message: "user password updated successfully",
   });
-};
-exports.deleteUserProfile = async (req, res) => {};
+});
 
-//! admin functionality
-exports.fetchAllUsers = async (req, res, next) => {
+//! delete user ==> user
+exports.deleteUserProfile = async (req, res) => {
+  let id = req.foundUser._id;
+  await USER_SCHEMA.deleteOne({ _id: id });
+  res.status(200).json({ success: true, message: "user deleted successfully" });
+};
+
+//! ================================== admin functionality
+
+//! fetch all
+exports.fetchAllUsers = asyncHandler(async (req, res, next) => {
   let users = await USER_SCHEMA.find();
 
   if (users.length === 0) {
@@ -124,7 +134,43 @@ exports.fetchAllUsers = async (req, res, next) => {
   }
 
   res.status(200).json({ success: true, message: "all users fetched", users: users });
-};
-exports.fetchSingleUser = async (req, res) => {};
-exports.deleteUser = async (req, res) => {};
-exports.updateUserRole = async (req, res) => {};
+});
+
+//! fetch one user
+exports.fetchSingleUser = asyncHandler(async (req, res, next) => {
+  let id = req.params.id;
+  let findUser = await USER_SCHEMA.findOne({ _id: id });
+
+  if (!findUser) {
+    return next(new ErrorHandler("user not found", 404));
+  }
+
+  res
+    .status(200)
+    .json({ success: true, message: "User details fetched successfully", data: findUser });
+});
+
+//! delete user ==> admin
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+  let findUser = await USER_SCHEMA.findOne({ _id: req.params.id });
+  if (!findUser) return next(new ErrorHandler("no user found", 400));
+
+  await USER_SCHEMA.deleteOne({ _id: req.params.id });
+
+  res.status(200).json({ success: true, message: "user deleted successfully" });
+});
+
+//! update user role
+exports.updateUserRole = asyncHandler(async (req, res, next) => {
+  let id = req.params.id;
+  let { role } = req.body;
+
+  let findUser = await USER_SCHEMA.findOne({ _id: id });
+
+  if (!findUser) return next(new ErrorHandler("no user found", 400));
+
+  findUser.role = role;
+  await findUser.save();
+
+  res.status(200).json({ success: true, message: "user role updated successfully" });
+});

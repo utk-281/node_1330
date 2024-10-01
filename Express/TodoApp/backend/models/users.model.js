@@ -34,7 +34,12 @@ const userSchema = new Schema(
 );
 
 //! password hashing
-userSchema.pre("save", async function () {
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+    //* if password field is not modifying then don't execute this function
+  }
+
   let salt = await bcrypt.genSalt(10);
   let hashedPassword = await bcrypt.hash(this.password, salt);
   this.password = hashedPassword;

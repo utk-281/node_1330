@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import PrivateRoute from "./pages/PrivateRoute";
 import Navbar from "./components/Navbar";
 import Admin from "./pages/Admin";
+import AddTodo from "./pages/AddTodo";
 
 const App = () => {
   return (
@@ -23,6 +24,14 @@ const App = () => {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/add-todo"
+            element={
+              <PrivateRoute>
+                <AddTodo />
+              </PrivateRoute>
+            }
+          ></Route>
         </Routes>
       </BrowserRouter>
     </>
