@@ -2,13 +2,14 @@ const USER_SCHEMA = require("../models/users.model");
 const asyncHandler = require("express-async-handler");
 const { generateToken } = require("../utils/jwt");
 const { ErrorHandler } = require("../utils/ErrorHandler");
+const { uploadOnCloudinary } = require("../utils/cloudinary");
 
 //! user functionality
 //! ================================ register user =======================================
 exports.registerUser = asyncHandler(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.file.path);
   let { name, email, password, role } = req.body;
+
+  let profilePicturePath = await uploadOnCloudinary(req?.file?.path);
 
   let existingUser = await USER_SCHEMA.findOne({ email });
   if (existingUser) {
@@ -20,6 +21,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     email,
     password,
     role,
+    profilePicture:
+      profilePicturePath?.url || "https://cdn-icons-png.flaticon.com/512/149/149071.png",
   });
 
   res.status(201).json({
@@ -49,7 +52,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   console.log(token);
 
   res.cookie("cookie", token, {
-    // httpOnly: true,
+    httpOnly: true,
     maxAge: 1 * 60 * 60 * 1000,
   });
 
@@ -169,8 +172,10 @@ exports.updateUserRole = asyncHandler(async (req, res, next) => {
 
   if (!findUser) return next(new ErrorHandler("no user found", 400));
 
-  findUser.role = role;
-  await findUser.save();
+  let updateUser = await USER_SCHEMA.updateOne({ _id: id }, { $set: { role: role } });
+
+  // findUser.role = role;
+  // await findUser.save();
 
   res.status(200).json({ success: true, message: "user role updated successfully" });
 });

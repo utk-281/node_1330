@@ -15,8 +15,6 @@ const Login = () => {
       .then(() => {
         alert("Logged in Successfully");
 
-        console.log(document.cookie);
-
         // after login if user pressed back button it will redirect to home page
         navigate("/admin", { replace: true });
       })
