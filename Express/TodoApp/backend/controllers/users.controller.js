@@ -2,13 +2,21 @@ const USER_SCHEMA = require("../models/users.model");
 const asyncHandler = require("express-async-handler");
 const { generateToken } = require("../utils/jwt");
 const { ErrorHandler } = require("../utils/ErrorHandler");
-const { uploadOnCloudinary } = require("../utils/cloudinary");
+const { uploadOnCloudinary, deleteProfilePicture } = require("../utils/cloudinary");
 
 //! user functionality
 //! ================================ register user =======================================
 exports.registerUser = asyncHandler(async (req, res, next) => {
   let { name, email, password, role } = req.body;
 
+  console.log(req.files);
+
+  /* const profilePictureLocalPath = req?.files?.profilePicture?.[0]?.path;
+  const signatureLocalPath = req?.files?.signature?.[0]?.path;
+
+  const uploadProfilePicture = await uploadOnCloudinary(profilePictureLocalPath);
+  const uploadSignature = await uploadOnCloudinary(signatureLocalPath);
+ */
   let profilePicturePath = await uploadOnCloudinary(req?.file?.path);
 
   let existingUser = await USER_SCHEMA.findOne({ email });
@@ -23,6 +31,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     role,
     profilePicture:
       profilePicturePath?.url || "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+    /* signature: uploadSignature?.url || "https://cdn-icons-png.flaticon.com/512/149/149071.png", */
   });
 
   res.status(201).json({
@@ -125,6 +134,62 @@ exports.deleteUserProfile = async (req, res) => {
   await USER_SCHEMA.deleteOne({ _id: id });
   res.status(200).json({ success: true, message: "user deleted successfully" });
 };
+
+//! update user profile picture
+exports.updateProfilePicture = asyncHandler(async (req, res, next) => {
+  let id = req.foundUser._id;
+
+  let findUser = await USER_SCHEMA.findOne({ _id: id });
+
+  if (!findUser) throw next(new ErrorHandler("user not found", 404));
+
+  // http://res.cloudinary.com/dmqwvd39n/image/upload/v1728031992/sgalgg0e5ipkfr3y2mh3.png
+  //"https://cdn-icons-png.flaticon.com/512/149/149071.png"
+  if (findUser.profilePicture && findUser.profilePicture.includes("http")) {
+    let publicID = findUser.profilePicture.split("/").pop().split(".")[0];
+    console.log(publicID);
+    await deleteProfilePicture(publicID);
+  }
+
+  let newProfilePicturePath = req?.file?.path;
+  console.log(newProfilePicturePath);
+
+  let uploadedPath = await uploadOnCloudinary(newProfilePicturePath);
+
+  findUser.profilePicture = uploadedPath?.url;
+  await findUser.save();
+
+  res.status(200).json({
+    success: true,
+    message: "profile picture updated successfully",
+    data: findUser,
+  });
+});
+
+//! remove profile picture
+exports.removeProfilePicture = asyncHandler(async (req, res, next) => {
+  console.log(req.foundUser);
+  let id = req.foundUser._id;
+
+  let findUser = await USER_SCHEMA.findOne({ _id: id });
+
+  if (!findUser) return next(new ErrorHandler("user not found", 404));
+
+  if (findUser.profilePicture) {
+    let publicID = findUser.profilePicture.split("/").pop().split(".")[0];
+    console.log(publicID);
+    await deleteProfilePicture(publicID);
+  }
+
+  // findUser.profilePicture = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+  await findUser.save();
+
+  res.status(200).json({
+    success: true,
+    message: "profile picture removed successfully",
+    data: findUser,
+  });
+});
 
 //! ================================== admin functionality
 

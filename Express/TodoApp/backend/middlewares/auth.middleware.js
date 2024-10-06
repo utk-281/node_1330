@@ -3,7 +3,7 @@ const { JWT_SECRET } = require("../config");
 const USER_SCHEMA = require("../models/users.model");
 
 exports.authenticate = async (req, res, next) => {
-  console.log(req.cookies);
+  // console.log(req.cookies);
   let cookie = req?.cookies?.cookie;
 
   if (!cookie) {
@@ -11,7 +11,7 @@ exports.authenticate = async (req, res, next) => {
   }
 
   let decodedToken = jwt.verify(cookie, JWT_SECRET);
-  console.log(decodedToken);
+  // console.log(decodedToken);
   let myUser = await USER_SCHEMA.findOne({ _id: decodedToken.id });
   req.foundUser = myUser;
   next();
