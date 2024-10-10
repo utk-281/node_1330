@@ -80,3 +80,19 @@
 // };
 // console.log(emp.city);
 // console.log(emp[0]);
+
+// let EventEmitter = require("node:events");
+
+// let event = new EventEmitter();
+
+// // emit("event-name") ==> it is used to emit/define (custom) an event
+// // on("event-name", cb) ==> it is used to listen/catch an event
+// event.on("myCustomEvent", (chunks) => {
+//   console.log(chunks.number);
+//   console.log("event called");
+// });
+
+// event.emit("myCustomEvent", { message: "hello world", number: 1245, obj: {}, arr: [1, 2, 3] });
+
+let string = "string";
+console.log(string.split("").reverse().join(""));
