@@ -10,6 +10,7 @@ exports.addTodo = asyncHandler(async (req, res) => {
     task,
     description,
     status,
+    lastDate,
     createdBy: req.foundUser._id,
   });
 

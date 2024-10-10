@@ -12,6 +12,7 @@ const {
   updateUserRole,
   updateProfilePicture,
   removeProfilePicture,
+  getCurrentUser,
 } = require("../controllers/users.controller");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 const { upload } = require("../middlewares/multer.middleware");
@@ -46,6 +47,8 @@ router.patch(
 );
 
 router.patch("/remove-profile-picture", authenticate, removeProfilePicture);
+
+router.get("/current", authenticate, getCurrentUser);
 
 //! admin router
 router.get("/all", authenticate, authorize, fetchAllUsers);

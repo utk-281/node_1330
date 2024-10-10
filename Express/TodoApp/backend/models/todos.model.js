@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const moment = require("moment");
 
 const todoSchema = new Schema(
   {
@@ -17,6 +18,9 @@ const todoSchema = new Schema(
     },
     lastDate: {
       type: Date,
+      set: function (Date) {
+        return moment(Date, "DD/MM/YYYY", true).toDate();
+      },
     },
     createdBy: {
       type: Schema.Types.ObjectId,
@@ -26,4 +30,4 @@ const todoSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = model("Todo", todoSchema); // blogs
+module.exports = model("Todo", todoSchema); // todos

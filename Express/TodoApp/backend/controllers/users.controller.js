@@ -128,6 +128,22 @@ exports.updateUserPassword = asyncHandler(async (req, res) => {
   });
 });
 
+//! =========================forgot user password =========================
+exports.forgotPassword = asyncHandler(async (req, res) => {
+  let { email } = req.body;
+
+  let findUser = await USER_SCHEMA.findOne({ email });
+  if (!findUser) return next(new ErrorHandler("user not found", 404));
+
+  // email ==> mail
+
+  let message = `<h1>Click below link to reset your password</h1>`;
+
+  let subject = `reset password link`;
+
+  sendEmail(email, message, subject);
+});
+
 //! delete user ==> user
 exports.deleteUserProfile = async (req, res) => {
   let id = req.foundUser._id;
@@ -181,7 +197,7 @@ exports.removeProfilePicture = asyncHandler(async (req, res, next) => {
     await deleteProfilePicture(publicID);
   }
 
-  // findUser.profilePicture = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+  findUser.profilePicture = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
   await findUser.save();
 
   res.status(200).json({
@@ -189,6 +205,39 @@ exports.removeProfilePicture = asyncHandler(async (req, res, next) => {
     message: "profile picture removed successfully",
     data: findUser,
   });
+});
+
+// ? http://res.cloudinary.com/dmqwvd39n/image/upload/v1728289233/fuwqypy7bolxvjqofpap.jpg
+
+/* 
+  [
+    "http",
+    "res.cloudinary.com",
+    "dmqwvd39n",
+    "image",
+    "upload",
+    "v1728031992",
+    "sgalgg0e5ipkfr3y2mh3.png"
+  ]
+
+  [
+    "sgalgg0e5ipkfr3y2mh3",
+    "png"
+    ]
+ */
+
+//! get current user
+
+exports.getCurrentUser = asyncHandler(async (req, res) => {
+  let id = req.foundUser._id;
+
+  let findUser = await USER_SCHEMA.findOne({ _id: id });
+
+  if (!findUser) return res.status(200).json({ success: false, message: "user not logged in" });
+
+  res.status(200).json({ success: true, message: "user found" });
+
+  //! http://localhost:9000/users/v1/add ==> api / restful api
 });
 
 //! ================================== admin functionality
