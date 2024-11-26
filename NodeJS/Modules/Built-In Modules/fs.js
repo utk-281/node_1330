@@ -1,5 +1,5 @@
 // let variableName = require("module-name")
-let fs = require("fs");
+// let fs = require("fs");
 // console.log(fs);
 
 // fs ==> file system, using this module, we can perform CRUD operations on files.
@@ -268,3 +268,88 @@ let fs = require("fs");
 //   .catch((err) => {
 //     console.log(err);
 //   });
+
+//! ===========using promises (asynchronous execution) async and await ==================
+
+// console.log("start");
+
+// let function1 = async () => {
+//   let api = await fetch("https://fakestoreapi.com/products");
+//   console.log("inside async function1");
+//   console.log(api);
+// };
+
+// let function2 = async () => {
+//   let api = await fetch("https://fakestoreapi.com/products/1");
+//   console.log("inside function2");
+// };
+
+// let normalFunction = () => {
+//   console.log("inside normal function");
+// };
+
+// console.log("middle");
+// console.log("end");
+
+// function1();
+// function2();
+// normalFunction();
+
+// let fs = require("fs/promises");
+
+//! 1) creating a file
+
+let createFile = async () => {
+  await fs.writeFile("./index.html", " <h1> hello world </h1>");
+  console.log("file created");
+};
+
+// createFile();
+
+//! 2) reading a file
+let readFile = async () => {
+  let data = await fs.readFile("../Local Modules/output.js", "utf-8");
+  console.log(data);
+};
+// readFile();
+
+//! 3) updating a file
+let updateFile = async () => {
+  await fs.appendFile("./index.html", " <h2> hi </h2>");
+  console.log("file updated");
+};
+// updateFile();
+
+//! ===================  === buffer and streams === ======================
+
+//! buffer ==> it is an array, which is fixed in size and stores data in binary format on a temporary basis.
+
+//! streaming ==> copying the contents from source to destination in continuous chunks or pieces is called as streaming.
+
+// in NodeJS we have four different types of streams
+//? ==> 1) readable stream ==> it is used to read the data in streams.
+//? ==> 2) writable stream ==> it is used to write data to the destination in streams.
+//? ==> 3) duplex stream ==> it is used to perform both read and write simultaneously.
+//? ==> 4) transform stream ==> it is similar to duplex but data can be modified.
+
+let currentWord = "";
+let arr = [];
+let string = " my name  is     abc";
+// arr = ["my", "name", "is", "abc"]
+
+for (let i = 0; i < string.length; i++) {
+  if (string[i] !== " ") currentWord += string[i];
+  else {
+    if (currentWord.length > 0) {
+      arr.push(currentWord);
+      currentWord = "";
+    }
+  }
+}
+if (currentWord.length > 0) arr.push(currentWord);
+
+console.log(arr);
+
+// arr = ["my", "name", "is", "abc"]
+
+// arr = ["ym", "eman", "si", "cba"] expected output
