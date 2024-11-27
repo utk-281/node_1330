@@ -51,3 +51,33 @@
 let value = require("./NodeJS/Modules/Local Modules/functions");
 
 console.log(value.add(2, 3));
+
+// / let currentWord = "";
+// let arr = [];
+// let string = " my name  is     abc";
+// // arr = ["my", "name", "is", "abc"]
+
+// for (let i = 0; i < string.length; i++) {
+//   if (string[i] !== " ") currentWord += string[i];
+//   else {
+//     if (currentWord.length > 0) {
+//       arr.push(currentWord);
+//       currentWord = "";
+//     }
+//   }
+// }
+// if (currentWord.length > 0) arr.push(currentWord);
+
+// console.log(arr);
+
+// arr = ["my", "name", "is", "abc"]
+
+// arr = ["ym", "eman", "si", "cba"] expected output
+
+let fs = require("fs");
+
+let stream = fs.createReadStream("./fs.js", { highWaterMark: 10 });
+
+stream.on("data", (chunk) => {
+  console.log(`chunk size: ${chunk.length} ------ ${chunk}`);
+});

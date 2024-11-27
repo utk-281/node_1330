@@ -327,29 +327,48 @@ let updateFile = async () => {
 //! streaming ==> copying the contents from source to destination in continuous chunks or pieces is called as streaming.
 
 // in NodeJS we have four different types of streams
+
+let fs = require("fs");
+
 //? ==> 1) readable stream ==> it is used to read the data in streams.
+// method name ==> createReadStream()
+// syntax ==> createReadStream("path", "encoding")
+
+// let data = fs.createReadStream("./index.html", "utf-8"); // event emitted by createReadStream is "data"
+// // console.log(data);
+
+// data.on("data", (chunks) => {
+//   console.log(chunks);
+//   console.log("event");
+// });
+
+// let data = fs.createReadStream("./fs.js", { highWaterMark: 2000 });
+
+// data.on("data", (chunks) => {
+//   console.log(`chunks size : ${chunks.length} === chunks: ${chunks}`);
+// });
+
+//! in nodeJS to catch any event we use on()
+//! in nodeJS to create any event we use emit()
+
 //? ==> 2) writable stream ==> it is used to write data to the destination in streams.
+// method name ==> createWriteStream()
+// syntax ==> createWriteStream("path/filename")
+
+// let file = fs.createWriteStream("./demo.js");
+// //! we use write() to write the data on a file in streams
+// file.write(" let a = 10", () => {
+//   console.log("file created");
+// });
+
 //? ==> 3) duplex stream ==> it is used to perform both read and write simultaneously.
+// reading a file
+let read = fs.createReadStream("./index.html", "utf-8");
+// writing a file
+let file = fs.createWriteStream("./index.txt");
+//! pipe() ==> it connects source to destination
+//! read --> it is the source and file --> it is the destination
+//! syntax ==> source.pipe(destination)
+read.pipe(file);
+
 //? ==> 4) transform stream ==> it is similar to duplex but data can be modified.
-
-let currentWord = "";
-let arr = [];
-let string = " my name  is     abc";
-// arr = ["my", "name", "is", "abc"]
-
-for (let i = 0; i < string.length; i++) {
-  if (string[i] !== " ") currentWord += string[i];
-  else {
-    if (currentWord.length > 0) {
-      arr.push(currentWord);
-      currentWord = "";
-    }
-  }
-}
-if (currentWord.length > 0) arr.push(currentWord);
-
-console.log(arr);
-
-// arr = ["my", "name", "is", "abc"]
-
-// arr = ["ym", "eman", "si", "cba"] expected output
