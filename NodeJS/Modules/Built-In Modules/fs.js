@@ -363,9 +363,9 @@ let fs = require("fs");
 
 //? ==> 3) duplex stream ==> it is used to perform both read and write simultaneously.
 // reading a file
-let read = fs.createReadStream("./index.html", "utf-8");
+let read = fs.createReadStream("./index.html", "utf-8"); // source
 // writing a file
-let file = fs.createWriteStream("./index.txt");
+let file = fs.createWriteStream("./index.txt"); // destination
 //! pipe() ==> it connects source to destination
 //! read --> it is the source and file --> it is the destination
 //! syntax ==> source.pipe(destination)

@@ -68,17 +68,96 @@
 // { "Content-Type": "text/css" }         ==> for css response
 // { "Content-Type": "application/json" } ==> for json response
 
+// const http = require("http");
+// const fs = require("fs");
+
+// let server = http.createServer((req, res) => {
+//   //! === ===================sending html file======================== ===
+//   // let data = fs.readFileSync("./index.html", "utf-8");
+//   // res.writeHead(200, "ok", { "Content-Type": "text/html" });
+//   // res.end(data);
+//   //! === ===================sending css file======================== ===
+//   // let data = fs.readFileSync("./styles.css", "utf-8");
+//   // res.writeHead(200, "ok", { "Content-Type": "text/css" });
+//   // res.end(data);
+//   //! === ===================sending json file======================== ===
+//   // source ==> file
+//   // destination ==> UI
+//   let data = fs.createReadStream("./data.json", "utf-8");
+//   // source ==> data
+//   // destination ==> res
+//   data.pipe(res); // pipe() --> it will end the req-res cycle after displaying the contents
+//   //? res.end(); ==> not required
+// });
+
+// server.listen(9000, (err) => {
+//   if (err) console.log(err);
+//   console.log("server running at http://localhost:9000");
+// });
+
+//! ========================= ROUTING =============================
+
+// home page url ==> https://nodejs.org/en,  -->  https://nodejs.org/en/
+// about page url ==> https://nodejs.org/en/about
+// download page ==> https://nodejs.org/en/download/package-manager
+// blog page ==> https://nodejs.org/en/blog
+
+//! endpoints ==> /about, /download/package-manager, /blog, / --> (for home/landing page)
+
+//! routing ==> handling multiple endpoints is known as routing
+// /about is one endpoint
+// /download/package-manager is one endpoint
+
 const http = require("http");
 const fs = require("fs");
 
-let server = http.createServer((req, res) => {
-  //! === ===================sending html file======================== ===
-  let data = fs.readFileSync("./index.html", "utf-8");
-  res.writeHead(200, "ok", { "Content-Type": "text/html" });
-  res.end(data);
+const server = http.createServer((req, res) => {
+  // console.log(req.url);
+
+  //! ROUTING ==> handling user's multiple endpoint requests is called as routing
+  //! home page
+  if (req.url === "/") {
+    // res.end("home page");
+    res.writeHead(200, "ok", { "Content-Type": "text/html" });
+    let data = fs.createReadStream("./public/index.html", "utf-8");
+    data.pipe(res);
+  }
+  //! about page
+  else if (req.url === "/about") {
+    // res.end("about page");
+    res.writeHead(200, "ok", { "Content-Type": "text/html" });
+    fs.createReadStream("./public/about.html", "utf-8").pipe(res);
+  }
+  //! download page
+  else if (req.url === "/download/package-manager") {
+    // res.end("download page");
+    res.writeHead(200, "ok", { "Content-Type": "text/html" });
+    fs.createReadStream("./public/download.html", "utf-8").pipe(res);
+  }
+  //! page not found
+  else {
+    // res.end("page not found");
+    res.writeHead(200, "ok", { "Content-Type": "text/html" });
+    fs.createReadStream("./public/404.html", "utf-8").pipe(res);
+  }
 });
+
+// http://localhost:9000/download/package-manager
+
+/* req {
+    headers : {},
+    url: "data",
+    body:,
+    cookies:,
+    params:,
+    query:,
+    . 
+    .
+    .
+  } 
+*/
 
 server.listen(9000, (err) => {
   if (err) console.log(err);
-  console.log("server running at http://localhost:9000");
+  console.log("server running.................");
 });
