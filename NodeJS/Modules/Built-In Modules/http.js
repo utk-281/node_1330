@@ -122,18 +122,33 @@ const server = http.createServer((req, res) => {
     let data = fs.createReadStream("./public/index.html", "utf-8");
     data.pipe(res);
   }
+
   //! about page
   else if (req.url === "/about") {
     // res.end("about page");
     res.writeHead(200, "ok", { "Content-Type": "text/html" });
     fs.createReadStream("./public/about.html", "utf-8").pipe(res);
   }
+
   //! download page
   else if (req.url === "/download/package-manager") {
     // res.end("download page");
     res.writeHead(200, "ok", { "Content-Type": "text/html" });
     fs.createReadStream("./public/download.html", "utf-8").pipe(res);
   }
+
+  //! css page
+  else if (req.url === "/styles") {
+    res.writeHead(200, "ok", { "Content-Type": "text/css" });
+    fs.createReadStream("./public/styles.css", "utf-8").pipe(res);
+  }
+
+  //! json page
+  else if (req.url === "/json") {
+    res.writeHead(200, "ok", { "Content-Type": "application/json" });
+    fs.createReadStream("./public/data.json", "utf-8").pipe(res);
+  }
+
   //! page not found
   else {
     // res.end("page not found");
