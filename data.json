@@ -1,0 +1,11 @@
+{
+  "key1": "string",
+  "key2": 123,
+  "key3": true,
+  "key4": null,
+  "key5": [1, 23],
+  "key6": {}
+  // "key7":undefined,
+  // "key8":function(){},
+  // "key9":Date.now()
+}
