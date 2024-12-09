@@ -125,3 +125,28 @@ db.students.deleteMany({}); // all the documents will be deleted
 // ==> db
 
 //! github.com/utk-281
+
+//! ======================== operators in mongodb ==========================================
+
+//! 1) comparison operators ==> it is used to compare any two values
+/*
+
+gt, (greater than)                      ==> $gt
+lt, (lesser than)                       ==> $lt
+gte, (greater than or equal to)         ==> $gte
+lte, (lesser than or equal to)          ==> $lte
+eq, (equal to)                          ==> $eq
+ne, (not equal to)                      ==> $ne
+
+! syntax ==> findOne/find({ filter-part }, { projection }, { options })
+! { filter part } ==> { field-name: {$C-O: value} }
+? example ==> age should be less than or equal to 35
+--> db.c-name.find({ age: {$lte: 35} })
+
+in, (in)                                ==> $in
+nin, (not in)                           ==> $nin
+
+*/
+
+// find the details of all the employees who are working as salesman
+db.emp.find({ job: { $eq: "Salesman" } }); // case sensitive
