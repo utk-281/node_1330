@@ -79,6 +79,7 @@ db.teachers.insertMany([
 
 /*
     ! find/findOne( {filter}, {projection}, {options} )
+    projection ==> it is used to display any particular field
  */
 
 //! two ways
@@ -143,10 +144,49 @@ ne, (not equal to)                      ==> $ne
 ? example ==> age should be less than or equal to 35
 --> db.c-name.find({ age: {$lte: 35} })
 
-in, (in)                                ==> $in
-nin, (not in)                           ==> $nin
+in
+==> $in (fetches all the documents which satisfies each value given in the array)
+
+nin, (not in)                          
+==> $nin (fetches all the documents which does not contain the given values in the array)
+
+! syntax ==> findOne/find({ filter part})
+! --> { field-name : { $in/$nin: [v1, v2, v3,.......] } }
 
 */
 
 // find the details of all the employees who are working as salesman
-db.emp.find({ job: { $eq: "Salesman" } }); // case sensitive
+db.emp.find({ job: { $eq: "salesman" } }); // case sensitive, explicit use
+db.emp.find({ job: "salesman" }); // implicit $eq
+
+// find all the details of employees whose salary is greater than 1500
+db.emp.find({ sal: { $gt: 1500 } });
+
+// find all the details of emp working as clerk and manager
+db.emp.find({ job: { $eq: "manager" }, job: { $eq: "clerk" } });
+
+//! 1a) ==> if field is same and we have multiple conditions ==> then the last condition will be satisfied
+
+db.emp.find({ job: { $in: ["clerk", "manager"] } }); //! implicit or operator
+
+//! 2b) ==> if fields are different ==> then it will work as logical AND operator
+db.emp.find({ job: "manager", sal: { $gt: 2500 } }); //! implicit and operator
+
+//! 2) logical operators ==> it is used to compare multiple conditions
+
+/*
+
+  1) and ==> $and: it returns all the documents which satisfies all the given conditions
+  2) or
+  3) nor
+
+  !syntax ==> { $L-O: [ { cond1 }, { cond2 }, { cond3 }, .......  ] }
+  find the name and hireDate of emp who are working as clerk and having salary greater than 2500
+  db.emp.find( { $and: [ {job:"clerk"}, {sal:{ $gt: 2500 }} ] })
+
+  4)not
+
+*/
+
+db.emp.find({ $and: [{ job: "clerk" }, { sal: { $gt: 2500 } }] });
+//TODO--> Projection
