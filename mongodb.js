@@ -188,5 +188,19 @@ db.emp.find({ job: "manager", sal: { $gt: 2500 } }); //! implicit and operator
 
 */
 
-db.emp.find({ $and: [{ job: "clerk" }, { sal: { $gt: 2500 } }] });
-//TODO--> Projection
+//! find the name and hireDate of emp who are working as clerk and having salary greater than 2500
+db.emp.find(
+  { $and: [{ job: "clerk" }, { sal: { $gt: 2500 } }] },
+  { eName: 1, hireDate: 1, _id: 0 }
+);
+//! === whenever we use projection, by default _id field will be displaying
+// syntax ==> ({filter part}, {field-name:truthy/falsy})
+
+// falsy --> to hide any particular field
+// examples ==> 0, -0, "", null, undefined, NaN
+
+// truthy --> to display any particular field
+
+//! ques) find the names and job of all the emp.
+db.emp.find({}, { eName: 1, job: 1, _id: 0 });
+//! if there is no filter condition, leave the filter part empty.
