@@ -22,7 +22,7 @@
 //! 3) import the modules.
 
 // const mongodb = require("mongodb").MongoClient
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 // console.log(mongodb);
 //! MongoClient ==> it is used to create a connection between node and mongodb
 
@@ -40,8 +40,63 @@ const connectDB = async () => {
   let collection = await database.createCollection("myUsers");
   console.log("collection created....");
 
-  //   collection.insertOne({ name: "abc", phoneNo: 1234567890 });
-  //   console.log("data saved");
+  //! 1) create/ write data ==> insertOne({})/ insertMany([{},...])
+  // ==> insertOne({})
+  // let data = await collection.insertOne({ name: "varun", gender: "m" });
+  // console.log(data);
+  // ==> insertMany([{},{},...])
+  // let multipleData = await collection.insertMany([
+  //   { name: "ishika" },
+  //   { name: "sirisha" },
+  //   { name: "ashwin" },
+  // ]);
+  // console.log(multipleData);
+  // console.log("data added to database");
+
+  //! 2) fetch/ read data ==> findOne({})/ find({})
+  //! without filter condition
+  // let data = await collection.findOne(); // fetches the top most document
+  // console.log(data)
+
+  //! with filter condition
+  // let data = await collection.findOne({ name: "ishika" }); // it return an object
+  // console.log(data);
+
+  //67594caaf9286bbdd6064c99 ==> fetch the document which has this id
+  // let data = await collection.findOne({ _id: new ObjectId("67594caaf9286bbdd6064c99") }); //string
+  // console.log(data);
+
+  //!  without filter condition
+  // let data = await collection.find({}).toArray(); // it returns array of objects
+  // console.log(data);
+  //! whenever we use find() make sure to use toArray() to convert it into array of objects
+
+  //! with filter condition
+  // fetch all the details of users whose name is "ashwin"
+  // let data = await collection.find({ name: "ashwin" }).toArray(); // both values and keys are case sensitive
+  // console.log(data);
+
+  //! 3) delete data ==> deleteOne({})/ deleteMany({})
+
+  // let data = await collection.deleteOne({}); // deletes the top most document
+
+  // let data = await collection.deleteOne({ name: "varun" }); // deletes the first document which fulfills the condition
+
+  // let data = await collection.deleteMany({}); // deletes all the documents present inside the collection
+
+  // let data = collection.deleteMany({ name: "sirisha" }); // delete all the documents which fulfills the condition
+
+  //! 3) update data ==> updateOne({}, {}, {})/ updateMany({}, {}, {})
+
+  // collection.updateOne({ name: "ishika" }, { $set: { name: "ishi", city: "banglore" } });
+  // console.log("document updated");
+
+  // let data = await collection.updateOne(
+  //   { _id: new ObjectId("675955e340d5c05f936f1a68") }, // filter part
+  //   { $set: { city: "pune", email: "siri@gmail.com" } },
+  //   { upsert: true } //updation part
+  // );
+  // console.log(data);
 };
 
 connectDB();
