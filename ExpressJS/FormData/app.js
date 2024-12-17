@@ -1,8 +1,13 @@
 //! main file names can be app.js, index.js, server.js
 
+/*
+! --> import route.js file manually
+! --> use it in middleware 
+ */
+
 const express = require("express");
-const { createReadStream } = require("node:fs");
 const { MongoClient } = require("mongodb");
+const abc = require("./routes");
 
 //! connectDB function
 
@@ -20,12 +25,8 @@ const app = express();
 
 //! ==> middleware --> it is a function
 app.use(express.urlencoded({ extended: true }));
-
-// console.log(object);
-//! home page
-app.get("/", (req, res) => {
-  createReadStream("./pages/index.html", "utf-8").pipe(res);
-});
+// use()
+app.use("/api/v1", abc);
 
 //! form page
 app.get("/register", (req, res) => {
@@ -40,11 +41,6 @@ app.get("/json-data", (req, res) => {
 //! css data
 app.get("/styles", (req, res) => {
   createReadStream("./pages/style.css", "utf-8").pipe(res);
-});
-
-//! page not found
-app.get("*", (req, res) => {
-  res.send(`<h1> page not found </h1>`);
 });
 
 app.post("/abc", async (req, res) => {
@@ -65,6 +61,20 @@ app.post("/abc", async (req, res) => {
   res.send(`${username} is registered with ${userEmail} email successfully!!!!`);
 });
 
+//! fetch all users
+app.get("/users", async (req, res) => {
+  let collection = await connectDB();
+
+  let users = await collection.find().toArray();
+
+  res.send(users);
+});
+
+//! page not found
+app.get("*", (req, res) => {
+  res.send(`<h1> page not found </h1>`);
+});
+
 app.listen(9000, (err) => {
   if (err) console.log(err);
   console.log(`server running at http://localhost:9000`);
@@ -75,14 +85,3 @@ app.listen(9000, (err) => {
 // import variableName from ""
 
 //! commonJS format ==> let variableName = require("")
-
-let add = () => {
-  let sum = 2 + 3;
-  return sum;
-};
-
-let func1 = () => {
-  let result = add();
-  console.log(result); //5
-};
-func1();
