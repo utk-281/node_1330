@@ -7,6 +7,7 @@ connectDB();
 let app = express();
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use("/users/v1", userRoutes);
 
