@@ -39,6 +39,87 @@ exports.fetchAllUsers = async (req, res) => {
   }
 };
 
+exports.fetchOneUser = async (req, res) => {
+  try {
+    //! printing the req.params object
+    console.log(req.params);
+    // { id: '6765362de36610170e2e88e9' }
+
+    let { id } = req.params;
+
+    //! find the user
+    let user = await USER_SCHEMA.findOne({ _id: id });
+
+    if (!user) return res.json({ message: "user not found" });
+
+    //! display response
+    res.json({ success: true, message: "user found", user: user });
+
+    console.log(id);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  // let {id} = req.params
+  let id = req.params.id;
+
+  let user = await USER_SCHEMA.findOne({ _id: id });
+
+  if (!user) return res.json({ message: "no user found" });
+
+  let deleteUser = await USER_SCHEMA.deleteOne({ _id: id });
+
+  res.json({ success: true, message: "user deleted", user: user });
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    let { id } = req.params;
+
+    let user = await USER_SCHEMA.findById(id);
+
+    if (!user) return res.json({ message: "no user found" });
+
+    //! update
+
+    //! 1st way --> using updateOne()
+    // await USER_SCHEMA.updateOne(
+    //   { _id: id },
+    //   {
+    //     $set: {
+    //       username: req.body.username,
+    //       email: req.body.email,
+    //       password: req.body.password,
+    //       phoneNo: req.body.phoneNo,
+    //       isHavingInsurance: req.body.isHavingInsurance,
+    //     },
+    //   }
+    // );
+
+    // res.json({ success: true, message: "user updated successfully" });
+
+    //! 2nd way
+    user.username = req.body.username || user.username;
+    user.email = req.body.email || user.email;
+    user.password = req.body.password || user.password;
+    user.phoneNo = req.body.phoneNo || user.phoneNo;
+    user.isHavingInsurance = req.body.isHavingInsurance || user.isHavingInsurance;
+    // till here we are just assigning the values
+
+    await user.save(); // to save the updated details in database
+
+    res.json({ success: true, message: "user updated successfully" });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
+/* {
+    "email":"xyz1@gmail.com",
+    "isHavingInsurance":true
+} */
 /*
 {
   "username": "abc",
@@ -81,6 +162,18 @@ __v : is created and used by mongoose for it's internal implementations
 }
  */
 
-// https://www.amazon.in/boAt-BassHeads-100-Headphones-Black/dp/B071Z8M4KX/ref=sr_1_1?_encoding=UTF8&content-id=amzn1.sym.82b20790-8877-4d70-8f73-9d8246e460aa&dib=eyJ2IjoiMSJ9.u-Idkf73CqPLuA1aaV9B-5x-A4GMPw5VDZbEKNeLAqBryRtNoXKL3E10LKECSJtcLPPtydM8NNX8QHmlLo7lSUlOWFqJumNuxjbm2hWOQQdko-ChIuZ_iJVPMil_m9afBeGRFTqUDVmL8T7C5BPo5Zn1h2oXRT6v4WbGhOur5FXbXNPIQMGBVMys_v5kUBH0yP_5hb6v29XPOSLAL3a7JNq-hTrUJi-xLbyZ-L8qjGDn-DijIQBHdovUdKpkH71cQ-2b0NYkL-qFeEr6uiIqCH4hlnceN0T4RJCQjnO4MCkSbZ91yTHav-vMRqaSZmSFW8M-s4iTabA6KzTB-gir-Gv-sGFDaA6KrNZ5Ry56dM8.rKtUev-j41VWCkHCal7sXJ4DhYLTF8BI2gKDKxAME6E&dib_tag=se&pd_rd_r=3bdae4a9-39b0-48d6-94b8-a1d21a302f28&pd_rd_w=DXNU3&pd_rd_wg=UtzpF&pf_rd_p=82b20790-8877-4d70-8f73-9d8246e460aa&pf_rd_r=D8296E2J8AD29HB0FR6Q&qid=1734686581&refinements=p_89%3AboAt&s=electronics&sr=1-1
+// https://www.amazon.in/boAt-BassHeads-100-Headphones-Black/dp/B071Z8M4KX/ref=sr_1_1?_encoding=UTF8&content-id=amzn1.sym.82b20790-8877-4d70-8f73-9d8246e460aa&dib=eyJ2IjoiMSJ9
 
-//https://www.amazon.in/boAt-Rockerz-255-Pro-Earphones/dp/B08TV2P1N8/ref=sr_1_2?_encoding=UTF8&content-id=amzn1.sym.82b20790-8877-4d70-8f73-9d8246e460aa&dib=eyJ2IjoiMSJ9.u-Idkf73CqPLuA1aaV9B-5x-A4GMPw5VDZbEKNeLAqBryRtNoXKL3E10LKECSJtcLPPtydM8NNX8QHmlLo7lSUlOWFqJumNuxjbm2hWOQQdko-ChIuZ_iJVPMil_m9afBeGRFTqUDVmL8T7C5BPo5Zn1h2oXRT6v4WbGhOur5FXbXNPIQMGBVMys_v5kUBH0yP_5hb6v29XPOSLAL3a7JNq-hTrUJi-xLbyZ-L8qjGDn-DijIQBHdovUdKpkH71cQ-2b0NYkL-qFeEr6uiIqCH4hlnceN0T4RJCQjnO4MCkSbZ91yTHav-vMRqaSZmSFW8M-s4iTabA6KzTB-gir-Gv-sGFDaA6KrNZ5Ry56dM8.rKtUev-j41VWCkHCal7sXJ4DhYLTF8BI2gKDKxAME6E&dib_tag=se&pd_rd_r=3bdae4a9-39b0-48d6-94b8-a1d21a302f28&pd_rd_w=DXNU3&pd_rd_wg=UtzpF&pf_rd_p=82b20790-8877-4d70-8f73-9d8246e460aa&pf_rd_r=D8296E2J8AD29HB0FR6Q&qid=1734686581&refinements=p_89%3AboAt&s=electronics&sr=1-2&th=1
+//https://www.amazon.in/boAt-Rockerz-255-Pro-Earphones/dp/B08TV2P1N8/ref=sr_1_2?_encoding=UTF8&content-id=amzn1.sym.82b20790-8877-4d70-8f73-9d8246e460aa&dib=eyJ2IjoiMSJ9
+
+/*
+ req =  {
+    headers: value,
+    Date: value, 
+    .
+    .
+    .
+    body: value (user data),
+    params: value(unique ID)
+  }
+ */
