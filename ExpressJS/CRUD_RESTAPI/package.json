@@ -2,9 +2,9 @@
   "name": "formmvc",
   "version": "1.0.0",
   "description": "a small project which collects user data and stores it in database using express and mongoose",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon server.js"
   },
   "keywords": [
     "express",

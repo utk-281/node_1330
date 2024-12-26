@@ -15,3 +15,8 @@ app.listen(9000, (err) => {
   if (err) console.log(err);
   console.log("server running....");
 });
+
+//! 1) create a server using http module and define 4 endpoints contact, download, about us and a form page (it can be anything).
+
+//! 2) project/src/backend/node/controllers/index.js
+// test case --> server.version.v4
