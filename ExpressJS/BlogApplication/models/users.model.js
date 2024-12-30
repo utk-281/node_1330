@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const userSchema = new Schema(
   {
@@ -20,6 +21,7 @@ const userSchema = new Schema(
       trim: true,
       //   required:true
       required: [true, "this is a mandatory field"],
+      //! select: true,--> todo
     },
     role: {
       type: String,
@@ -32,5 +34,20 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+//! for password hashing
+userSchema.pre("save", async function () {
+  //! generating a random string or salt
+  let salt = await bcrypt.genSalt(7);
+
+  //! hash the password with the random string
+  let hashedPassword = await bcrypt.hash(this.password, salt);
+
+  //! store the hashed password in the database
+  this.password = hashedPassword;
+});
+
+//! pre() ==> pre() is used to execute something before a defined task.
+//! "save" ==> is passed as first argument which states that resources are saving in the database
 
 module.exports = model("User", userSchema);
