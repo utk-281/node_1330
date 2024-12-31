@@ -49,3 +49,70 @@ exports.fetchOneUser = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+exports.updateUserDetails = async (req, res) => {
+  try {
+    let { id } = req.params;
+
+    let user = await USER_SCHEMA.findOne({ _id: id });
+
+    if (!user) return res.status(404).json({ message: "no user present" });
+
+    await USER_SCHEMA.updateOne(
+      { _id: id },
+      {
+        name: req.body.name,
+        email: req.body.email,
+        phoneNo: req.body.phoneNo,
+      }
+    );
+    res.status(200).json({ success: true, message: "user updated successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.updateUserPassword = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let user = await USER_SCHEMA.findById(id);
+
+    if (!user) return res.status(404).json({ message: "no user found" });
+
+    user.password = req.body.password; //assign
+    await user.save(); // save the new data to database
+
+    res.status(200).json({ success: true, message: "user password updated" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let user = await USER_SCHEMA.findById(id);
+    if (!user) return res.status(404).json({ message: "no user found" });
+
+    let deletedUser = await USER_SCHEMA.findByIdAndDelete(id);
+    res.status(200).json({ success: true, message: "user deleted successfully", deletedUser });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.loginInUser = async (req, res) => {
+  try {
+    let { email, password } = req.body;
+    let user = await USER_SCHEMA.findOne({ email });
+    if (!user) return res.status(400).json({ message: "email not registered" });
+
+    let isMatch = await user.comparePassword(password);
+    // console.log(isMatch);
+    if (!isMatch) return res.status(400).json({ message: "wrong password" });
+
+    res.status(200).json({ success: true, message: "user logged in" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

@@ -50,4 +50,9 @@ userSchema.pre("save", async function () {
 //! pre() ==> pre() is used to execute something before a defined task.
 //! "save" ==> is passed as first argument which states that resources are saving in the database
 
+//! creating a method to compare password
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
 module.exports = model("User", userSchema);
