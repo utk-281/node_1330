@@ -2,7 +2,8 @@ const express = require("express");
 const { PORT } = require("./config");
 const { connectDB } = require("./config/database");
 
-const userRoutes = require("./routes/users.route");
+const userRoutes = require("./routes/users.routes");
+const blogRoutes = require("./routes/blogs.routes");
 
 connectDB();
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/v1/users", userRoutes);
+app.use("/v1/blogs", blogRoutes);
 
 app.listen(PORT, (err) => {
   if (err) throw err;
