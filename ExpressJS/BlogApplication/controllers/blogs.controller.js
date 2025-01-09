@@ -24,6 +24,7 @@ exports.fetchOneBlog = async (req, res) => {
   try {
     let { id } = req.params;
     let oneBlog = await BLOG_SCHEMA.findById(id);
+    // let oneBlog = await BLOG_SCHEMA.findOne({_id:id});
     if (!oneBlog) return res.status(404).json({ message: "no blog found" });
     res.status(200).json({ success: true, message: "blog fetched successfully", oneBlog });
   } catch (error) {

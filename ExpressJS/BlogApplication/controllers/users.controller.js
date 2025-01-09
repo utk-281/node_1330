@@ -1,6 +1,7 @@
 //! import the schema/ collection
 
 const USER_SCHEMA = require("../models/users.model");
+const { generateToken } = require("../utils/jwt");
 
 exports.registerUser = async (req, res) => {
   try {
@@ -111,8 +112,19 @@ exports.loginInUser = async (req, res) => {
     // console.log(isMatch);
     if (!isMatch) return res.status(400).json({ message: "wrong password" });
 
-    res.status(200).json({ success: true, message: "user logged in" });
+    let token = await generateToken(user._id);
+    // console.log(token);
+    // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NzI2NWFhYmY3YmRlNGMzNWE3OWIzNCIsImlhdCI6MTczNjQxNDM3NywiZXhwIjoxNzM3MDE5MTc3fQ.CsD0JFVt19GIVdff7L03UmL1nmS0XFuMHNSLM6g5wuw
+
+    res.cookie("myCookie", token, {
+      maxAge: 1 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
+
+    res.status(200).json({ success: true, message: "user logged in", token });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//! to handle cookies we use cookie-parser module
