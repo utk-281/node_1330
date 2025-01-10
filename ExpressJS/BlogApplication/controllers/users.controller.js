@@ -128,3 +128,10 @@ exports.loginInUser = async (req, res) => {
 };
 
 //! to handle cookies we use cookie-parser module
+
+exports.logout = async (req, res) => {
+  res.clearCookie("myCookie", "", {
+    maxAge: 0,
+  });
+  res.status(200).json({ success: true, message: "user logged out" });
+};
