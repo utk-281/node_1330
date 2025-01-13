@@ -12,7 +12,7 @@ const router = Router();
 router.post("/add-blog", authenticate, createBlog);
 router.get("/blogs", fetchAllBlogs);
 router.get("/blog/:id", fetchOneBlog);
-router.delete("/blog/:id", deleteBlog);
-router.patch("/blog/:id", updateBlog);
+router.delete("/blog/:id", authenticate, deleteBlog);
+router.patch("/blog/:id", authenticate, updateBlog);
 
 module.exports = router;

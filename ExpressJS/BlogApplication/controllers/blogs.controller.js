@@ -3,7 +3,7 @@ const BLOG_SCHEMA = require("../models/blogs.model");
 exports.createBlog = async (req, res) => {
   try {
     let { title, body } = req.body;
-    let newBlog = await BLOG_SCHEMA.create({ title, body });
+    let newBlog = await BLOG_SCHEMA.create({ title, body, author: req?.myUser?._id });
     res.status(201).json({ success: true, message: "blog created successfully", newBlog });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -35,8 +35,9 @@ exports.fetchOneBlog = async (req, res) => {
 exports.updateBlog = async (req, res) => {
   try {
     let { id } = req.params;
+    let userId = req.myUser._id; // author:userId
     if (!id) return res.status(404).json({ message: "no blog found" });
-    let updatedBlog = await BLOG_SCHEMA.findByIdAndUpdate(id, req.body, { new: true });
+    let updatedBlog = await BLOG_SCHEMA.findByIdAndUpdate(id, req.body, { new: true }); // here we have to check two conditions 1) params id is same as blog id 2) the user which has initiated the req matches with author
     res.status(200).json({ success: true, message: "blog updated successfully", updatedBlog });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

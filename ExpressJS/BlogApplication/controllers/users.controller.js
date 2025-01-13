@@ -118,7 +118,7 @@ exports.loginInUser = async (req, res) => {
 
     res.cookie("myCookie", token, {
       maxAge: 1 * 60 * 60 * 1000,
-      httpOnly: true,
+      httpOnly: true, // cannot access cookie from client side
     });
 
     res.status(200).json({ success: true, message: "user logged in", token });
