@@ -2,7 +2,7 @@ const express = require("express");
 const { PORT } = require("./config");
 const { connectDB } = require("./config/database");
 const cookieParser = require("cookie-parser");
-//  let cors = require("cors")
+const cors = require("cors");
 
 const userRoutes = require("./routes/users.routes");
 const blogRoutes = require("./routes/blogs.routes");
@@ -14,7 +14,7 @@ const app = express();
 //! middlewares
 app.use(express.json());
 app.use(cookieParser());
-// app.use(cors())
+app.use(cors());
 
 app.use("/v1/users", userRoutes);
 app.use("/v1/blogs", blogRoutes);
